@@ -2,7 +2,6 @@ let array = [];
 
 function getAllElements(domElement){
     let ul = document.getElementsByTagName(domElement)
-
     getAllTagNames(ul)
 
     let tagNamesElements =(array.map(x => x.toLowerCase()));
