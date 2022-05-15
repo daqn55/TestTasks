@@ -1,37 +1,51 @@
-﻿using Task1.Interfaces;
+﻿using System.Text;
+using Task1.Interfaces;
 using Task1.Models;
 
 namespace Task1
 {
     internal class MovieStarDataExtraction : IMovieStarDataExtraction
     {
-        private readonly ICollection<MovieStar> MovieStarsRawData;
+        private readonly ICollection<MovieStar> _movieStarsRawData;
+
+        private const string ERROR_MSG = "Invalid input!";
+        private const string AGE_MSG = "{0} years old";
 
         public MovieStarDataExtraction(ICollection<MovieStar> movieStarsRawData)
         {
-            this.MovieStarsRawData = movieStarsRawData;
+            _movieStarsRawData = movieStarsRawData;
+
+            if (_movieStarsRawData == null)
+            {
+                throw new Exception(ERROR_MSG);
+            }
         }
 
-        private string IterationMovieStar()
+        private string IterationOfMovieStars()
         {
-            if (this.MovieStarsRawData == null)
+            var movieStarOutput = string.Empty;
+            foreach (var movieStarData in _movieStarsRawData)
             {
-                throw new Exception("Invalid input!");
+               movieStarOutput += CreateMovieStar(movieStarData);
             }
 
-            var currentMovieStarInformation = string.Empty;
-            foreach (var movieStarData in this.MovieStarsRawData)
-            {
-                currentMovieStarInformation += string.Concat(movieStarData.Name, " ", movieStarData.Surname, Environment.NewLine);
-                currentMovieStarInformation += string.Concat(movieStarData.Sex, Environment.NewLine);
-                currentMovieStarInformation += string.Concat(movieStarData.Nationality, Environment.NewLine);
+            return movieStarOutput;
+        }
 
-                var age = CalculateMovieStarAge(movieStarData.DateOfBirth);
+        private string CreateMovieStar(MovieStar movieStarData)
+        {
+            var movieStar = new StringBuilder();
 
-                currentMovieStarInformation += string.Concat(age, Environment.NewLine, Environment.NewLine);
-            }
+            movieStar.AppendLine(movieStarData.Name + " " + movieStarData.Surname);
+            movieStar.AppendLine(movieStarData.Sex);
+            movieStar.AppendLine(movieStarData.Nationality);
 
-            return currentMovieStarInformation;
+            var age = CalculateMovieStarAge(movieStarData.DateOfBirth);
+
+            movieStar.AppendLine(age);
+            movieStar.AppendLine();
+
+            return movieStar.ToString();
         }
 
         private string CalculateMovieStarAge(DateTime birthday)
@@ -39,20 +53,17 @@ namespace Task1
             var today = DateTime.Today;
             var age = today.Year - birthday.Year;
 
-            if (birthday.Month > today.Month)
+            if (birthday.Month > today.Month || birthday.Day > today.Day)
             {
                 age--;
             }
-            else if (birthday.Day > today.Day)
-            {
-                age--;
-            }
-            return $"{age} years old";
+
+            return string.Format(AGE_MSG, age);
         }
 
         public void PrintMovieStarData()
         {
-            var dataToPrint = IterationMovieStar();
+            var dataToPrint = IterationOfMovieStars();
 
             Console.WriteLine(dataToPrint);
         }
