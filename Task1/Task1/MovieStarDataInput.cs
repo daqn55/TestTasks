@@ -11,14 +11,12 @@ namespace Task1
 {
     internal class MovieStarDataInput : IMovieStarDataInput
     {
-        private readonly string FileLocation = @"InputFiles\input.txt";
-        private readonly string ErrorMsg = "Invalid input!";
-
-        public MovieStarDataInput() { }
+        private const string FILE_LOCATION = @"InputFiles\input.txt";
+        private const string ERROR_MSG = "Invalid input!";
 
         public ICollection<MovieStar> GetMovieStarRawData()
         {
-            var inputData = ImportJsonDataFromTxtFile(this.FileLocation);
+            var inputData = ImportJsonDataFromTxtFile(FILE_LOCATION);
 
             try
             {
@@ -26,14 +24,14 @@ namespace Task1
 
                 if (data == null)
                 {
-                    throw new Exception(ErrorMsg);
+                    throw new Exception(ERROR_MSG);
                 }
 
                 return data;
             }
             catch (Exception)
             {
-                throw new Exception(ErrorMsg);
+                throw new Exception(ERROR_MSG);
             }
         }
 
