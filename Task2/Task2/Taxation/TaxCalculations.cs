@@ -9,9 +9,9 @@ namespace Task2.Taxation
         private readonly IDbContext _db;
         private readonly IReadAndPrint _readAndPrint;
 
-        private const string NoTaxationMsg = "There is no taxation, net income is {0} IDR";
-        private const string AmountOfTaxMsg = "{0} is {1} IDR";
-        private const string TotalTaxMsg = "The total tax is {0} IDR and the net income is {1} IDR";
+        private const string NO_TAXATION_MSG = "There is no taxation, net income is {0} IDR";
+        private const string AMOUNT_OF_TAX_MSG = "{0} is {1} IDR";
+        private const string TOTAL_TAX_MSG = "The total tax is {0} IDR and the net income is {1} IDR";
 
         public TaxCalculations(IDbContext db, IReadAndPrint readAndPrint)
         {
@@ -35,7 +35,7 @@ namespace Task2.Taxation
             var sb = new StringBuilder();
             if (taxAmount <= withoutTaxAmount)
             {
-                var msg = string.Format(NoTaxationMsg, taxAmount.ToString("f2"));
+                var msg = string.Format(NO_TAXATION_MSG, taxAmount.ToString("f2"));
 
                 sb.Append(msg);
             }
@@ -57,7 +57,7 @@ namespace Task2.Taxation
                     {
                         var tax = (taxAmount - withoutTaxAmount) * (taxRate / 100d);
                         totalTax += tax;
-                        sb.Append(string.Format(AmountOfTaxMsg, taxName, tax.ToString("f2")));
+                        sb.Append(string.Format(AMOUNT_OF_TAX_MSG, taxName, tax.ToString("f2")));
                         sb.Append(Environment.NewLine);
                     }
                     else
@@ -66,12 +66,12 @@ namespace Task2.Taxation
 
                         var tax = amountForTaxing * (taxRate / 100d);
                         totalTax += tax;
-                        sb.Append(string.Format(AmountOfTaxMsg, taxName, tax.ToString("f2")));
+                        sb.Append(string.Format(AMOUNT_OF_TAX_MSG, taxName, tax.ToString("f2")));
                         sb.Append(Environment.NewLine);
                     }
                 }
 
-                sb.Append(string.Format(TotalTaxMsg, totalTax.ToString("f2"), (taxAmount - totalTax).ToString("f2")));
+                sb.Append(string.Format(TOTAL_TAX_MSG, totalTax.ToString("f2"), (taxAmount - totalTax).ToString("f2")));
             }
 
             return sb;
