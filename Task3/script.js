@@ -1,10 +1,6 @@
-window.onload = function() {
-    extractAllElements('div')
-}
-
 let array = [];
 
-function extractAllElements(domElement){
+function getAllElements(domElement){
     let ul = document.getElementsByTagName(domElement)
 
     getAllTagNames(ul)
