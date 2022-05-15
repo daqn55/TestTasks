@@ -2,14 +2,14 @@
 
 namespace Task2.IO
 {
-    internal class ReadAndPrint : IReadAndPrint
+    public class ReadAndPrint : IReadAndPrint
     {
         public void WriteLine(string data)
         {
             Console.WriteLine(data);
         }
 
-        public string ReadLine()
+        public string? ReadLine()
         {
            return Console.ReadLine();
         }

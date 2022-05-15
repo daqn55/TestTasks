@@ -4,14 +4,15 @@ using Task2.Interfaces;
 using Task2.IO;
 using Task2.Taxation;
 
+IDbContext db = new DbContext();
+IReadAndPrint readAndPrint = new ReadAndPrint();
+ITaxCalculation taxCalculation = new TaxCalculations(db, readAndPrint);
+
 while (true)
 {
-    IReadAndPrint readAndPrint = new ReadAndPrint();
 
     readAndPrint.WriteLine(@"Please enter the gross value to calculate the net salary or type 'HELP' for more options: ");
-    var input = readAndPrint.ReadLine().ToLower();
-
-    IDbContext db = new DbContext();
+    var input = readAndPrint.ReadLine()?.ToLower();
 
     switch (input)
     {
@@ -33,7 +34,6 @@ while (true)
 
     if (isTaxAmountInCorrectFormat)
     {
-        ITaxCalculation taxCalculation = new TaxCalculations(db, readAndPrint);
         taxCalculation.PrintTaxes(taxAmount);
     }
 }

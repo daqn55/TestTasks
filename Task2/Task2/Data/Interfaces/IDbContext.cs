@@ -2,7 +2,7 @@
 
 namespace Task2.Data.Interfaces
 {
-    internal interface IDbContext
+    public interface IDbContext
     {
         public void AddTaxesToDb(TaxModel model);
 

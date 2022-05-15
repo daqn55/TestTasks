@@ -1,6 +1,6 @@
 ﻿namespace Task2.Interfaces
 {
-    internal interface IAddNewTax
+    public interface IAddNewTax
     {
         public string AddingTax();
     }

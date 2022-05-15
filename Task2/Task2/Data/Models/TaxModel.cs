@@ -1,6 +1,6 @@
 ﻿namespace Task2.Data.Models
 {
-    internal class TaxModel
+    public class TaxModel
     {
         public int Id { get; set; }
 

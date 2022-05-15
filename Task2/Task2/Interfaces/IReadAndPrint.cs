@@ -1,10 +1,10 @@
 ﻿namespace Task2.Interfaces
 {
-    internal interface IReadAndPrint
+    public interface IReadAndPrint
     {
         public void Write(string data);
         public void WriteLine(string data);
 
-        public string ReadLine();
+        public string? ReadLine();
     }
 }

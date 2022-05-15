@@ -4,7 +4,7 @@ using Task2.Interfaces;
 
 namespace Task2.Taxation
 {
-    internal class AddNewTax : IAddNewTax
+    public class AddNewTax : IAddNewTax
     {
         private readonly IDbContext _db;
         private readonly IReadAndPrint _readAndPrint;
@@ -13,7 +13,7 @@ namespace Task2.Taxation
         private const string SUCCESS_MSG = "New Tax has added.";
         private const string ERROR_MSG_NAME = "Please enter a valid name!";
         private const string ERROR_MSG_TAX_RATE = "Please enter a valid tax rate!";
-        private const string ERROR_MSG_TAX_LIMIT = "Please higher value than no taxation amount!";
+        private const string ERROR_MSG_TAX_LIMIT = "Please enter higher value than no taxation amount!";
 
         private const string TAX_NAME_MSG = "Tax name: ";
         private const string TAX_RATE_MSG = "Tax rate: ";
@@ -44,51 +44,50 @@ namespace Task2.Taxation
 
         private TaxModel GetInputForModel()
         {
-            _readAndPrint.Write(TAX_NAME_MSG);
-            var taxName = _readAndPrint.ReadLine().Trim();
-
-            _readAndPrint.Write(TAX_RATE_MSG);
-            int taxRate;
-            var isValidtaxRate = int.TryParse(_readAndPrint.ReadLine().Trim(), out taxRate);
-
-            _readAndPrint.Write(UPPER_TAX_LIMIT_MSG);
-            double upperTaxLimit;
-            var isValidUpperTaxLimit = double.TryParse(_readAndPrint.ReadLine(), out upperTaxLimit);
             var amountWithoutTaxingModel = _db.GetAllTaxes().FirstOrDefault(x => x.TaxRate == 0);
             var amountWithoutTaxing = amountWithoutTaxingModel != null ? amountWithoutTaxingModel.UpperTaxLimit : 0;
 
-            while (true)
+            var taxName = string.Empty;
+            var IsTaxNameValid = string.IsNullOrEmpty(taxName);
+            while (IsTaxNameValid)
             {
-                if (string.IsNullOrEmpty(taxName))
+                _readAndPrint.Write(TAX_NAME_MSG);
+                taxName = _readAndPrint.ReadLine()?.Trim();
+                IsTaxNameValid = string.IsNullOrEmpty(taxName);
+
+                if (IsTaxNameValid)
                 {
                     _readAndPrint.WriteLine(ERROR_MSG_NAME);
-                    _readAndPrint.Write(TAX_NAME_MSG);
-                    taxName = _readAndPrint.ReadLine().Trim();
-                }
-                else if (!isValidtaxRate)
-                {
-                    _readAndPrint.WriteLine(ERROR_MSG_TAX_RATE);
-                    _readAndPrint.Write(TAX_RATE_MSG);
-                    isValidtaxRate = int.TryParse(_readAndPrint.ReadLine().Trim(), out taxRate);
-                }
-                else if (isValidUpperTaxLimit)
-                {
-                    if (upperTaxLimit > 0 && upperTaxLimit < amountWithoutTaxing)
-                    {
-                        _readAndPrint.WriteLine(ERROR_MSG_TAX_LIMIT);
-                        _readAndPrint.Write(UPPER_TAX_LIMIT_MSG);
-                        isValidUpperTaxLimit = double.TryParse(_readAndPrint.ReadLine(), out upperTaxLimit);
-                        continue;
-                    }
-
-                    break;
-                }
-                else
-                {
-                    break;
                 }
             }
-            
+
+            int taxRate = 0;
+            var isValidtaxRate = false;
+
+            while (!isValidtaxRate)
+            {
+                _readAndPrint.Write(TAX_RATE_MSG);
+                isValidtaxRate = int.TryParse(_readAndPrint.ReadLine()?.Trim(), out taxRate);
+
+                if (!isValidtaxRate)
+                {
+                    _readAndPrint.WriteLine(ERROR_MSG_TAX_RATE);
+                }
+            }
+
+            double upperTaxLimit = 1;
+            var isValidUpperTaxLimit = true;
+            while (isValidUpperTaxLimit && (upperTaxLimit > 0 && upperTaxLimit < amountWithoutTaxing))
+            {
+                _readAndPrint.Write(UPPER_TAX_LIMIT_MSG);
+                isValidUpperTaxLimit = double.TryParse(_readAndPrint.ReadLine()?.Trim(), out upperTaxLimit);
+
+                if (upperTaxLimit > 0 && upperTaxLimit < amountWithoutTaxing)
+                {
+                    _readAndPrint.WriteLine(ERROR_MSG_TAX_LIMIT);
+                }
+            }
+
             var model = new TaxModel();
 
             model.TaxName = taxName;
