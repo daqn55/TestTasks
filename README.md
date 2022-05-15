@@ -16,3 +16,9 @@ There are two more commands:
 
 - "Help": It's show you all commands.
 - "Exit": Quits the program.
+
+Task 3
+
+It's not good practice to put JavaScript directly into Html file, that's why I created separate JavaStcript file "script.js".
+
+To use the function you need just to open in browser Task3.html file and then open the developer tap (it's usually F12 on Chrome and Edge), after that open console tab and type "getAllElements('ul')". In place of the 'ul' element you can put and every other DOM element.
